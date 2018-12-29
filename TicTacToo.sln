@@ -3,6 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TicTacToo", "TicTacToo\TicTacToo.csproj", "{FFF33B59-F357-4585-BD41-4EA07C20509B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F95A29A1-E677-4566-8D2B-FA6641431206}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+		LICENSE = LICENSE
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

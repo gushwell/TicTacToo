@@ -3,7 +3,12 @@
 namespace TicTacToo {
     class Program {
         static void Main(string[] args) {
-            Console.WriteLine("Hello World!");
+            var controller = new Controller();
+            while (true) {
+                controller.Run();
+                if (!Controller.Confirm("Try Again?"))
+                    break;
+            }
         }
     }
 }
