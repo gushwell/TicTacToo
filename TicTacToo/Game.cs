@@ -4,13 +4,19 @@ using System.Collections.Generic;
 namespace TicTacToo {
     public class Game : IObservable<Board> {
         private Board _board;
-        private Match _match;
+        private IPlayer _player1;
+        private IPlayer _player2;
+
+        public Game(IPlayer player1, IPlayer player2, Board board)
+        {
+            _player1 = player1;
+            _player2 = player2;
+            _board = board;
+        }
 
         // Game開始
-        public Stone Start(Match match, Board board) {
-            _match = match;
-            _board = board;
-            IPlayer player = _match.First;
+        public Stone Start() {
+            IPlayer player = _player1;
             Publish(_board);
             while (!_board.IsFin()) {
                 player.MakeMove(_board);
@@ -24,7 +30,7 @@ namespace TicTacToo {
 
         // 次のプレイヤー
         private IPlayer Turn(IPlayer player) {
-            return player == _match.First ? _match.Second : _match.First;
+            return player == _player1 ? _player2 : _player1;
         }
 
         private List<IObserver<Board>> _observers = new List<IObserver<Board>>();

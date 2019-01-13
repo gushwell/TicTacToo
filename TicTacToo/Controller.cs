@@ -1,38 +1,39 @@
 ﻿using System;
 namespace TicTacToo {
     class Controller : IObserver<Board> {
-
+        private IPlayer _player1;
+        private IPlayer _player2;
         private Board _board;
-        private Match _match;
 
         // 試合の開始
         public void Run() {
-            _match = DecideFirstPlayer();
+            DecideFirstPlayer();
             _board = new Board();
-            var game = new Game();
+            var game = new Game(_player1, _player2, _board);
             // 購読者は自分自身
             game.Subscribe(this);
-            var win = game.Start(_match, _board);
+            var win = game.Start();
         }
 
         // 先手を決める
-        private Match DecideFirstPlayer() {
-            var match = new Match();
+        private void DecideFirstPlayer() {
             var b = Confirm("Are you first?");
             if (b) {
-                match.First = new HumanPlayer(Stone.Black);
-                match.Second = new PerfectPlayer(Stone.White);
+                _player1 = new HumanPlayer(Stone.Black);
+                _player2 = new PerfectPlayer(Stone.White);
             } else {
-                match.First = new PerfectPlayer(Stone.Black);
-                match.Second = new HumanPlayer(Stone.White);
+                _player1 = new PerfectPlayer(Stone.Black);
+                _player2 = new HumanPlayer(Stone.White);
             }
-            return match;
         }
+
+        private IPlayer GetHumanPlayer() =>
+             _player1 is HumanPlayer ? _player1 : _player2;
 
         // 盤面を表示
         private void Print(Board board) {
             Console.Clear();
-            Console.WriteLine("You: {0}\n", _match.Human.Stone == Stone.White ? "O" : "X");
+            Console.WriteLine("You: {0}\n", GetHumanPlayer().Stone.Value);
             for (int y = 1; y <= 3; y++) {
                 for (int x = 1; x <= 3; x++) {
                     Console.Write(board[x, y].Value + " ");
@@ -44,9 +45,10 @@ namespace TicTacToo {
         // 終了した
         public void OnCompleted() {
             var win = _board.Judge();
+            var human = GetHumanPlayer();
             if (win == Stone.Empty)
                 Console.WriteLine("Draw");
-            else if (win == _match.Human.Stone)
+            else if (win == human.Stone)
                 Console.WriteLine("You Win");
             else
                 Console.WriteLine("You Lose");
